@@ -15,11 +15,12 @@ export async function getEvents(): Promise<object[]> {
       '--single-process',
       '--disable-gpu'
     ],
-    headless: true
+    headless: 'new'
   })
+  const page = await browser.newPage()
+  page.setDefaultNavigationTimeout(60000)
 
   // Open science museum events page
-  const page = await browser.newPage()
   await page.goto('https://my.sciencemuseum.org.uk/events')
   console.log('Launching website...')
 
