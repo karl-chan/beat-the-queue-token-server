@@ -59,7 +59,10 @@ export async function getEvents(): Promise<object[]> {
     console.log('Clicked 1st of month')
 
     // Wait for results
-    await page.waitForXPath(`//*[@id="tn-event-listing-view-results-heading" and contains(text(), ${nextYear})]`)
+    await page.waitForXPath(
+      `//*[@id="tn-event-listing-view-results-heading" and contains(text(), ${nextYear})]`,
+      { timeout: 60000 }
+    )
     console.log('Loaded events page (until next year)')
 
     if (jsonResponse === null) {
