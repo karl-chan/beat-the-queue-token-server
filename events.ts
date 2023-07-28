@@ -77,6 +77,8 @@ export async function getEvents(): Promise<object[]> {
     console.log('Took screenshot /tmp/science-museum-error-screenshot.jpg...')
 
   } finally {
+    await page.close()
+    console.log('Closed page')
     await browser.close()
     console.log('Closed browser')
   }
