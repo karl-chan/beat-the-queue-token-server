@@ -20,7 +20,7 @@ export async function getEvents(): Promise<object[]> {
   const page = await browser.newPage()
   page.setDefaultNavigationTimeout(60000)
 
-  let jsonResponse = null
+  let jsonResponse: object[] = []
   try {
     // Open science museum events page
     await page.goto('https://my.sciencemuseum.org.uk/events')
@@ -70,10 +70,11 @@ export async function getEvents(): Promise<object[]> {
     }
 
   } catch (err) {
+    console.error(err)
+
     // Take screenshot for debugging in case of WAF
     await page.screenshot({ path: '/tmp/science-museum-error-screenshot.jpg' })
     console.log('Took screenshot /tmp/science-museum-error-screenshot.jpg...')
-    throw err
 
   } finally {
     await browser.close()
