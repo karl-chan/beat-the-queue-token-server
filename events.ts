@@ -1,5 +1,6 @@
-import puppeteer from 'puppeteer-extra'
-import StealthPlugin from 'puppeteer-extra-plugin-stealth'
+import fs from 'fs/promises';
+import puppeteer from 'puppeteer-extra';
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 
 puppeteer.use(StealthPlugin())
 
@@ -17,6 +18,10 @@ export async function getEvents(): Promise<object[]> {
     ],
     headless: 'new'
   })
+  const chromeTmpDataDir = browser.process()?.spawnargs
+    .find(arg => arg.startsWith("--user-data-dir"))
+    ?.replace("--user-data-dir=", "")
+
   const page = await browser.newPage()
   page.setDefaultNavigationTimeout(60000)
 
@@ -81,6 +86,11 @@ export async function getEvents(): Promise<object[]> {
     console.log('Closed page')
     await browser.close()
     console.log('Closed browser')
+
+    if (chromeTmpDataDir !== null) {
+      await fs.rm(chromeTmpDataDir!, { recursive: true, force: true })
+      console.log(`Deleted puppeteer temp dir ${chromeTmpDataDir}`)
+    }
   }
 
   return jsonResponse
