@@ -3,7 +3,7 @@ import { getEvents } from './events';
 
 let events: object[] = []
 
-const refreshInterval = 10 * 60 * 1000 // 10 minutes
+const refreshInterval = 5 * 60 * 1000 // 5 minutes
 async function refreshEvents() {
   console.log('About to refresh events...')
   events = await getEvents()
