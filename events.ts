@@ -87,8 +87,8 @@ export async function getEvents(): Promise<object[]> {
     await browser.close()
     console.log('Closed browser')
 
-    if (chromeTmpDataDir !== null) {
-      await fs.rm(chromeTmpDataDir!, { recursive: true, force: true })
+    if (chromeTmpDataDir) {
+      await fs.rm(chromeTmpDataDir, { recursive: true, force: true })
       console.log(`Deleted puppeteer temp dir ${chromeTmpDataDir}`)
     }
   }
