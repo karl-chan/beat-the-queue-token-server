@@ -3,7 +3,7 @@ import EventsProvider from './events';
 
 let events: object[] = []
 
-const refreshInterval = 1 * 60 * 1000 // 5 minutes
+const refreshInterval = 5 * 60 * 1000 // 5 minutes
 
 async function main() {
   const provider = new EventsProvider()
