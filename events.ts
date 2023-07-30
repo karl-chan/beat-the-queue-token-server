@@ -26,7 +26,7 @@ export default class EventsProvider {
       ],
       headless: 'new'
     })
-    console.log('Initialise browser')
+    console.log('Initialised browser')
   }
   async getEvents(): Promise<object[]> {
     if (!this.browser) {
