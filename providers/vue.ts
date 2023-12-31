@@ -28,7 +28,7 @@ export class Vue implements Provider<VueToken> {
       logger.info('Opened new page')
       page.setDefaultNavigationTimeout(60000)
 
-      // Open science museum events page
+      // Open vue home page
       await page.goto('https://www.myvue.com/')
       logger.info('Launching website...')
 
