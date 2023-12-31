@@ -3,10 +3,12 @@ import Koa from 'koa'
 import { type Browser } from 'puppeteer'
 import { HeadlessBrowser } from './browser'
 import { type Provider } from './provider'
+import { Odeon } from './providers/odeon'
 import { ScienceMuseum } from './providers/science_museum'
 import { hours, newLogger } from './util'
 
 const PROVIDERS = [
+  new Odeon(),
   new ScienceMuseum()
 ]
 const REFRESH_INTERVAL = hours(6)
