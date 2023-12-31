@@ -4,11 +4,13 @@ import { HeadlessBrowser } from './browser'
 import { type Provider } from './provider'
 import { Odeon } from './providers/odeon'
 import { ScienceMuseum } from './providers/science_museum'
+import { Vue } from './providers/vue'
 import { hours, newLogger } from './util'
 
 const PROVIDERS = [
   new Odeon(),
-  new ScienceMuseum()
+  new ScienceMuseum(),
+  new Vue()
 ]
 const REFRESH_INTERVAL = hours(6)
 
