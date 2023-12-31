@@ -1,30 +1,58 @@
-import Koa from 'koa';
-import EventsProvider from './events';
+import Router from '@koa/router'
+import Koa from 'koa'
+import { type Browser } from 'puppeteer'
+import { HeadlessBrowser } from './browser'
+import { type Provider } from './provider'
+import { ScienceMuseum } from './providers/science_museum'
+import { hours, newLogger } from './util'
 
-let events: object[] = []
+const PROVIDERS = [
+  new ScienceMuseum()
+]
+const REFRESH_INTERVAL = hours(6)
 
-const refreshInterval = 5 * 60 * 1000 // 5 minutes
+const logger = newLogger('Server')
+const app = new Koa()
+const router = new Router()
+const port: number = +(process.env.PORT ?? '3000')
 
-async function main() {
-  const provider = new EventsProvider()
-  await provider.init()
+app.use(router.routes())
+app.listen(port, () => {
+  logger.info(`Server listening on port ${port}`)
+})
 
-  async function refreshEvents() {
-    console.log('About to refresh events...')
-    events = await provider.getEvents()
-    console.log('Refreshed events')
-  }
+async function main (): Promise<void> {
+  const browser = await new HeadlessBrowser().init()
+  const cachedTokens = getDefaultTokens()
+  registerRoutes(cachedTokens)
 
-  refreshEvents()
-  setInterval(refreshEvents, refreshInterval)
+  await updateTokens(cachedTokens, browser)
+  setInterval(() => { void updateTokens(cachedTokens, browser) }, REFRESH_INTERVAL)
 }
 
-const app = new Koa()
-app.use(ctx => {
-  ctx.body = events
-})
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`Server listening on port ${process.env.PORT || 3000}`)
-})
+function getDefaultTokens (): Map<Provider<any>, object> {
+  const defaultTokens = new Map<Provider<any>, object>()
+  for (const tokenProvider of PROVIDERS) {
+    defaultTokens.set(tokenProvider, tokenProvider.default)
+  }
+  return defaultTokens
+}
 
-main()
+async function updateTokens (cachedTokens: Map<Provider<any>, object>, browser: Browser): Promise<void> {
+  for (const tokenProvider of PROVIDERS) {
+    logger.info(`Start updateTokens for ${tokenProvider.route}`)
+    const newToken = await tokenProvider.get(browser)
+    cachedTokens.set(tokenProvider, newToken)
+    logger.info(`End updateTokens for ${tokenProvider.route}`)
+  }
+}
+
+function registerRoutes (tokens: Map<Provider<any>, object>): void {
+  for (const tokenProvider of PROVIDERS) {
+    router.get(tokenProvider.route, (ctx) => {
+      ctx.body = tokens.get(tokenProvider)
+    })
+  }
+}
+
+void main()
