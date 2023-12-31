@@ -1,6 +1,5 @@
 import Router from '@koa/router'
 import Koa from 'koa'
-import { type Browser } from 'puppeteer'
 import { HeadlessBrowser } from './browser'
 import { type Provider } from './provider'
 import { Odeon } from './providers/odeon'
@@ -24,12 +23,11 @@ app.listen(port, () => {
 })
 
 async function main (): Promise<void> {
-  const browser = await new HeadlessBrowser().init()
   const cachedTokens = getDefaultTokens()
   registerRoutes(cachedTokens)
 
-  await updateTokens(cachedTokens, browser)
-  setInterval(() => { void updateTokens(cachedTokens, browser) }, REFRESH_INTERVAL)
+  await updateTokens(cachedTokens)
+  setInterval(() => { void updateTokens(cachedTokens) }, REFRESH_INTERVAL)
 }
 
 function getDefaultTokens (): Map<Provider<any>, object> {
@@ -40,13 +38,15 @@ function getDefaultTokens (): Map<Provider<any>, object> {
   return defaultTokens
 }
 
-async function updateTokens (cachedTokens: Map<Provider<any>, object>, browser: Browser): Promise<void> {
+async function updateTokens (cachedTokens: Map<Provider<any>, object>): Promise<void> {
+  const browser = await new HeadlessBrowser().init()
   for (const tokenProvider of PROVIDERS) {
     logger.info(`Start updateTokens for ${tokenProvider.route}`)
     const newToken = await tokenProvider.get(browser)
     cachedTokens.set(tokenProvider, newToken)
     logger.info(`End updateTokens for ${tokenProvider.route}`)
   }
+  await browser.close()
 }
 
 function registerRoutes (tokens: Map<Provider<any>, object>): void {
