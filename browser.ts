@@ -20,7 +20,7 @@ export class HeadlessBrowser {
         '--single-process',
         '--disable-gpu'
       ],
-      headless: false
+      headless: process.env.NODE_ENV === 'production' ? 'new' : false
     })
     logger.info('Initialised browser')
 
