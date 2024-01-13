@@ -42,7 +42,7 @@ export class Odeon implements Provider<OdeonToken> {
       await page?.screenshot({ path: '/tmp/odeon-error-screenshot.jpg' })
       logger.error('Took screenshot /tmp/odeon-error-screenshot.jpg...')
 
-      throw (err)
+      throw err
     } finally {
       await page?.close()
       logger.info('Closed page')

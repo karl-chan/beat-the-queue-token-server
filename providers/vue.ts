@@ -52,7 +52,7 @@ export class Vue implements Provider<VueToken> {
       await page?.screenshot({ path: '/tmp/vue-error-screenshot.jpg' })
       logger.error('Took screenshot /tmp/vue-error-screenshot.jpg...')
 
-      throw (err)
+      throw err
     } finally {
       await page?.close()
       logger.info('Closed page')

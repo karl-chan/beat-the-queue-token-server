@@ -52,7 +52,7 @@ export class ScienceMuseum implements Provider<ScienceMuseumToken> {
       await page?.screenshot({ path: '/tmp/science-museum-error-screenshot.jpg' })
       logger.error('Took screenshot /tmp/science-museum-error-screenshot.jpg...')
 
-      throw (err)
+      throw err
     } finally {
       await page?.close()
       logger.info('Closed page')
