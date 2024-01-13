@@ -28,7 +28,7 @@ export class Odeon implements Provider<OdeonToken> {
       logger.info('Launching website...')
 
       // Wait for page to load
-      await page.waitForNetworkIdle()
+      await page.waitForXPath('//title[contains(text(), "ODEON")]')
       logger.info('Loaded page with authToken')
 
       const html = await page.content()
