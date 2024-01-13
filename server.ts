@@ -42,13 +42,16 @@ function getDefaultTokens (): Map<Provider<any>, object> {
 
 async function updateTokens (cachedTokens: Map<Provider<any>, object>): Promise<void> {
   const browser = await new HeadlessBrowser().init()
-  for (const tokenProvider of PROVIDERS) {
-    logger.info(`Start updateTokens for ${tokenProvider.route}`)
-    const newToken = await tokenProvider.get(browser)
-    cachedTokens.set(tokenProvider, newToken)
-    logger.info(`End updateTokens for ${tokenProvider.route}`)
+  try {
+    for (const tokenProvider of PROVIDERS) {
+      logger.info(`Start updateTokens for ${tokenProvider.route}`)
+      const newToken = await tokenProvider.get(browser)
+      cachedTokens.set(tokenProvider, newToken)
+      logger.info(`End updateTokens for ${tokenProvider.route}`)
+    }
+  } finally {
+    await browser.close()
   }
-  await browser.close()
 }
 
 function registerRoutes (tokens: Map<Provider<any>, object>): void {
