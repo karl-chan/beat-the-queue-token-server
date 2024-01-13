@@ -21,14 +21,15 @@ export class Odeon implements Provider<OdeonToken> {
     try {
       page = await browser.newPage()
       logger.info('Opened new page')
-      page.setDefaultNavigationTimeout(60000)
+      page.setDefaultNavigationTimeout(120000)
+      page.setDefaultTimeout(120000)
 
       // Open odeon page
       await page.goto('https://www.odeon.co.uk/')
       logger.info('Launching website...')
 
       // Wait for page to load
-      await page.waitForXPath('//title[contains(text(), "ODEON")]')
+      await page.waitForXPath('//script[contains(text(), "authToken")]')
       logger.info('Loaded page with authToken')
 
       const html = await page.content()

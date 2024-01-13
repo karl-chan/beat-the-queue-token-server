@@ -26,7 +26,8 @@ export class Vue implements Provider<VueToken> {
     try {
       page = await browser.newPage()
       logger.info('Opened new page')
-      page.setDefaultNavigationTimeout(60000)
+      page.setDefaultNavigationTimeout(120000)
+      page.setDefaultTimeout(120000)
 
       // Open vue home page
       await page.goto('https://www.myvue.com/')

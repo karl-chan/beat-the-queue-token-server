@@ -26,7 +26,8 @@ export class ScienceMuseum implements Provider<ScienceMuseumToken> {
     try {
       page = await browser.newPage()
       logger.info('Opened new page')
-      page.setDefaultNavigationTimeout(60000)
+      page.setDefaultNavigationTimeout(120000)
+      page.setDefaultTimeout(120000)
 
       // Open science museum events page
       await page.goto('https://my.sciencemuseum.org.uk/events')
