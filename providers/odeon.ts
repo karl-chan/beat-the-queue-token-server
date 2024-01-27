@@ -25,7 +25,7 @@ export class Odeon implements Provider<OdeonToken> {
       page.setDefaultTimeout(120000)
 
       // Open odeon page
-      await page.goto('https://www.odeon.co.uk/')
+      await page.goto('https://webcache.googleusercontent.com/search?q=cache:http://odeon.co.uk')
       logger.info('Launching website...')
 
       // Wait for page to load
