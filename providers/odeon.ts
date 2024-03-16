@@ -2,7 +2,7 @@ import { type Browser, type Page } from 'puppeteer'
 import puppeteer from 'puppeteer-extra'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import { type Provider } from '../provider'
-import { newLogger } from '../util'
+import { hours, newLogger } from '../util'
 
 puppeteer.use(StealthPlugin())
 
@@ -15,6 +15,7 @@ interface OdeonToken {
 export class Odeon implements Provider<OdeonToken> {
   route = '/odeon'
   default = { jwtToken: '' }
+  refreshInterval = hours(6)
 
   async get (browser: Browser): Promise<OdeonToken> {
     let page: Page | undefined

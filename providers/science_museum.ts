@@ -2,7 +2,7 @@ import { type Browser, type Page } from 'puppeteer'
 import puppeteer from 'puppeteer-extra'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import { type Provider } from '../provider'
-import { newLogger } from '../util'
+import { minutes, newLogger } from '../util'
 
 puppeteer.use(StealthPlugin())
 
@@ -20,6 +20,7 @@ interface Cookie {
 export class ScienceMuseum implements Provider<ScienceMuseumToken> {
   route = '/science-museum'
   default = { cookies: [] }
+  refreshInterval = minutes(20)
 
   async get (browser: Browser): Promise<ScienceMuseumToken> {
     let page: Page | undefined

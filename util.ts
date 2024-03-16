@@ -8,6 +8,10 @@ export function hours (hours: number): number {
   return dayjs.duration({ hours }).asMilliseconds()
 }
 
+export function minutes (minutes: number): number {
+  return dayjs.duration({ minutes }).asMilliseconds()
+}
+
 export function newLogger (name: string): Logger {
   const { label, timestamp, combine, colorize, align, printf } = format
   return createLogger({

@@ -2,7 +2,7 @@ import { type Browser, type Page } from 'puppeteer'
 import puppeteer from 'puppeteer-extra'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import { type Provider } from '../provider'
-import { newLogger } from '../util'
+import { hours, newLogger } from '../util'
 
 puppeteer.use(StealthPlugin())
 
@@ -20,6 +20,7 @@ interface Cookie {
 export class Vue implements Provider<VueToken> {
   route = '/vue'
   default = { cookies: [] }
+  refreshInterval = hours(6)
 
   async get (browser: Browser): Promise<VueToken> {
     let page: Page | undefined
